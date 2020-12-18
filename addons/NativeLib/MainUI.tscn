@@ -1,0 +1,128 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/NativeLib/MainUI.gd" type="Script" id=1]
+[ext_resource path="res://addons/NativeLib/icons/glass.svg" type="Texture" id=2]
+[ext_resource path="res://addons/NativeLib/icons/android.svg" type="Texture" id=3]
+[ext_resource path="res://addons/NativeLib/icons/apple_logo.svg" type="Texture" id=4]
+
+[node name="MainUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="view" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="top" type="HBoxContainer" parent="view"]
+margin_right = 815.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="SearchLineEdit" type="LineEdit" parent="view/top"]
+margin_right = 757.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+right_icon = ExtResource( 2 )
+placeholder_text = "Search"
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SearchButton" type="Button" parent="view/top"]
+margin_left = 761.0
+margin_right = 815.0
+margin_bottom = 20.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Search"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scroll" type="ScrollContainer" parent="view"]
+margin_top = 28.0
+margin_right = 815.0
+margin_bottom = 1236.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+follow_focus = true
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="list" type="VBoxContainer" parent="view/scroll"]
+margin_right = 815.0
+margin_bottom = 1208.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="status" type="HBoxContainer" parent="view"]
+margin_top = 1240.0
+margin_right = 815.0
+margin_bottom = 1280.0
+
+[node name="info" type="Label" parent="view/status"]
+margin_top = 13.0
+margin_right = 261.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+text = "0 packages in repository, 0 installed"
+
+[node name="AndroidButton" type="CheckButton" parent="view/status"]
+margin_left = 265.0
+margin_right = 356.0
+margin_bottom = 40.0
+hint_tooltip = "Enable Android"
+icon = ExtResource( 3 )
+
+[node name="iOSButton" type="CheckButton" parent="view/status"]
+margin_left = 360.0
+margin_right = 451.0
+margin_bottom = 40.0
+hint_tooltip = "Enable iOS"
+icon = ExtResource( 4 )
+
+[node name="system" type="Label" parent="view/status"]
+margin_left = 455.0
+margin_top = 13.0
+margin_right = 564.0
+margin_bottom = 27.0
+text = "Global NativeLib "
+
+[node name="InstallSystemButton" type="Button" parent="view/status"]
+margin_left = 568.0
+margin_right = 684.0
+margin_bottom = 40.0
+text = "Install NativeLib"
+
+[node name="UpdateSystemButton" type="Button" parent="view/status"]
+visible = false
+margin_left = 479.0
+margin_right = 601.0
+margin_bottom = 24.0
+text = "Update NativeLib"
+
+[node name="UpdateRepoButton" type="Button" parent="view/status"]
+margin_left = 688.0
+margin_right = 815.0
+margin_bottom = 40.0
+text = "Update repository"
+[connection signal="toggled" from="view/status/AndroidButton" to="." method="_on_AndroidButton_toggled"]
+[connection signal="toggled" from="view/status/iOSButton" to="." method="_on_iOSButton_toggled"]
+[connection signal="pressed" from="view/status/InstallSystemButton" to="." method="_on_InstallSystemButton_pressed"]
+[connection signal="pressed" from="view/status/UpdateSystemButton" to="." method="_on_UpdateSystemButton_pressed"]
+[connection signal="pressed" from="view/status/UpdateRepoButton" to="." method="_on_UpdateRepoButton_pressed"]
