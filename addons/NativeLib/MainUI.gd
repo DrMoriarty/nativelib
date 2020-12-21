@@ -77,7 +77,7 @@ func load_project() -> void:
         push_error('Can not read NativeLib project meta data.')
 
 func update_plugin_list() -> void:
-    for ch in $view/scroll/list.get_children():
+    for ch in $view/panel/scroll/margin/list.get_children():
         ch.queue_free()
     for plugin in _STORAGE:
         var info = _STORAGE[plugin]
@@ -90,7 +90,7 @@ func update_plugin_list() -> void:
         pi.connect('install', self, '_on_plugin_install')
         pi.connect('uninstall', self, '_on_plugin_uninstall')
         pi.connect('update', self, '_on_plugin_update')
-        $view/scroll/list.add_child(pi)
+        $view/panel/scroll/margin/list.add_child(pi)
 
 func get_installed_packages() -> Array:
     var result := []
