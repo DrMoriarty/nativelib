@@ -17,6 +17,9 @@ custom_constants/margin_top = 4
 custom_constants/margin_left = 4
 custom_constants/margin_bottom = 4
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="view" type="VBoxContainer" parent="."]
 margin_left = 4.0
@@ -104,37 +107,35 @@ custom_constants/separation = 4
 
 [node name="info" type="Label" parent="view/status"]
 margin_top = 13.0
-margin_right = 245.0
+margin_right = 329.0
 margin_bottom = 27.0
 size_flags_horizontal = 3
-text = "0 packages in repository, 0 installed"
 
 [node name="AndroidButton" type="CheckButton" parent="view/status"]
-margin_left = 249.0
-margin_right = 340.0
+margin_left = 333.0
+margin_right = 424.0
 margin_bottom = 40.0
 hint_tooltip = "Enable Android"
 icon = ExtResource( 3 )
 
 [node name="iOSButton" type="CheckButton" parent="view/status"]
-margin_left = 344.0
-margin_right = 435.0
+margin_left = 428.0
+margin_right = 519.0
 margin_bottom = 40.0
 hint_tooltip = "Enable iOS"
 icon = ExtResource( 4 )
 
 [node name="system" type="Label" parent="view/status"]
-margin_left = 439.0
+margin_left = 523.0
 margin_top = 13.0
-margin_right = 548.0
+margin_right = 523.0
 margin_bottom = 27.0
-text = "Global NativeLib "
 
 [node name="InstallSystemButton" type="Button" parent="view/status"]
-margin_left = 552.0
+margin_left = 527.0
 margin_right = 644.0
 margin_bottom = 40.0
-text = "NativeLib"
+text = "NativeLib-CLI"
 icon = ExtResource( 6 )
 
 [node name="UpdateSystemButton" type="Button" parent="view/status"]
@@ -142,7 +143,7 @@ visible = false
 margin_left = 479.0
 margin_right = 601.0
 margin_bottom = 24.0
-text = "NativeLib"
+text = "NativeLib-CLI"
 icon = ExtResource( 5 )
 
 [node name="UpdateRepoButton" type="Button" parent="view/status"]

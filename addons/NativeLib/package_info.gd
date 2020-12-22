@@ -19,20 +19,31 @@ func _ready() -> void:
 func init_info(info: Dictionary, local: Dictionary) -> void:
     _info = info
     _local = local
-    $box/left/name.text = info.name
+    $box/left/plugin/name.text = info.name
     $box/left/version.text = 'Latest: %s'%info.latest_version
+    var platforms = []
+    var files = info.versions[info.latest_version]
+    for f in files:
+        var fns = f.name.split('_')
+        var pls = fns[-1].split('.')
+        platforms.append(pls[0])
+    $box/left/plugin/android.visible = 'android' in platforms
+    $box/left/plugin/ios.visible = 'ios' in platforms
+    $box/left/plugin/universal.visible = 'all' in platforms
     var installed := false
     var latest := false
     if 'version' in _local:
-        $box/left/box/installed.text = 'Installed: %s'%local.version
+        $box/left/installed/version.text = 'Installed: %s'%local.version
         installed = true
         latest = local.version == info.latest_version
-        $box/left/box/android.visible = 'android' in local.platforms
-        $box/left/box/ios.visible = 'ios' in local.platforms
+        $box/left/installed/android.visible = 'android' in local.platforms
+        $box/left/installed/ios.visible = 'ios' in local.platforms
+        $box/left/installed/universal.visible = 'all' in local.platforms
     else:
-        $box/left/box/installed.text = 'Not installed'
-        $box/left/box/android.visible = false
-        $box/left/box/ios.visible = false
+        $box/left/installed/version.text = 'Not installed'
+        $box/left/installed/android.visible = false
+        $box/left/installed/ios.visible = false
+        $box/left/installed/universal.visible = false
     $box/right/description.text = info.description
     $box/right/controls/InstallButton.visible = not installed
     $box/right/controls/UpdateButton.visible = not latest and installed

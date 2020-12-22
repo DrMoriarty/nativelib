@@ -143,6 +143,9 @@ func _http_request_completed(result, response_code, headers, body) -> void:
 
 func _on_UpdateRepoButton_pressed() -> void:
     nativelib(['--update'])
+    load_storage()
+    update_plugin_list()
+    update_status()
 
 func _on_plugin_install(package: String) -> void:
     nativelib(['--install', package])
