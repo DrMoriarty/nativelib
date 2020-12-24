@@ -97,7 +97,7 @@ margin_right = 708.0
 margin_bottom = 1196.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/separation = 4
+custom_constants/separation = 16
 
 [node name="status" type="HBoxContainer" parent="view"]
 margin_top = 1232.0

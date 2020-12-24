@@ -152,8 +152,18 @@ func _on_plugin_install(package: String) -> void:
     load_project()
     update_plugin_list()
     update_status()
+    # install all new android modules
+    if 'packages' in _PROJECT:
+        for package in _PROJECT.packages:
+            var info = _PROJECT.packages[package]
+            if 'android_module' in info:
+                add_android_module(info.android_module)
 
 func _on_plugin_uninstall(package: String) -> void:
+    if package in _PROJECT.packages:
+        var local = _PROJECT.packages[package]
+        if 'android_module' in local:
+            remove_android_module(local.android_module)
     nativelib(['--uninstall', package])
     load_project()
     update_plugin_list()
@@ -197,3 +207,23 @@ func _on_iOSButton_toggled(button_pressed: bool) -> void:
     nativelib(['--ios'], false)
     load_project()
     update_system_info()
+
+func remove_android_module(module: String) -> void:
+    var modules := []
+    if ProjectSettings.has_setting('android/modules'):
+        var ms = ProjectSettings.get_setting('android/modules')
+        if ms != null and ms != '':
+            modules = ms.split(',')
+    if module in modules:
+        modules.erase(module)
+        ProjectSettings.set_setting('android/modules', PoolStringArray(modules).join(','))
+
+func add_android_module(module: String) -> void:
+    var modules := []
+    if ProjectSettings.has_setting('android/modules'):
+        var ms = ProjectSettings.get_setting('android/modules')
+        if ms != null and ms != '':
+            modules = ms.split(',')
+    if not module in modules:
+        modules.append(module)
+        ProjectSettings.set_setting('android/modules', PoolStringArray(modules).join(','))

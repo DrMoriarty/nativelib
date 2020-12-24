@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/NativeLib/plugin_variable.gd" type="Script" id=1]
+
+[node name="plugin_variable" type="HBoxContainer"]
+margin_right = 516.0
+margin_bottom = 24.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="var_desc" type="Label" parent="."]
+margin_top = 5.0
+margin_right = 256.0
+margin_bottom = 19.0
+size_flags_horizontal = 3
+align = 2
+
+[node name="var_value" type="LineEdit" parent="."]
+margin_left = 260.0
+margin_right = 516.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+[connection signal="text_changed" from="var_value" to="." method="_on_var_value_text_changed"]

@@ -16,6 +16,7 @@ anchor_right = 1.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 0, 100 )
 size_flags_horizontal = 3
+size_flags_vertical = 3
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -110,7 +111,7 @@ __meta__ = {
 }
 
 [node name="universal" type="TextureRect" parent="box/left/installed"]
-modulate = Color( 0.498039, 0.921569, 1, 1 )
+modulate = Color( 0.572549, 1, 0.498039, 1 )
 margin_left = 146.0
 margin_right = 162.0
 margin_bottom = 31.0
@@ -118,7 +119,7 @@ texture = ExtResource( 7 )
 stretch_mode = 4
 
 [node name="android" type="TextureRect" parent="box/left/installed"]
-modulate = Color( 0.498039, 0.921569, 1, 1 )
+modulate = Color( 0.572549, 1, 0.498039, 1 )
 margin_left = 166.0
 margin_right = 181.0
 margin_bottom = 31.0
@@ -126,7 +127,7 @@ texture = ExtResource( 2 )
 stretch_mode = 4
 
 [node name="ios" type="TextureRect" parent="box/left/installed"]
-modulate = Color( 0.498039, 0.921569, 1, 1 )
+modulate = Color( 0.572549, 1, 0.498039, 1 )
 margin_left = 185.0
 margin_right = 200.0
 margin_bottom = 31.0
@@ -146,14 +147,13 @@ margin_right = 516.0
 margin_bottom = 66.0
 grow_horizontal = 2
 grow_vertical = 0
-rect_min_size = Vector2( 50, 0 )
+rect_min_size = Vector2( 50, 25 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Module Name"
 align = 1
 valign = 1
 autowrap = true
-clip_text = true
 
 [node name="controls" type="HBoxContainer" parent="box/right"]
 margin_top = 70.0
@@ -163,6 +163,13 @@ rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 3
 custom_constants/separation = 4
 alignment = 2
+
+[node name="deps" type="Label" parent="box/right/controls"]
+margin_top = 8.0
+margin_right = 270.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+clip_text = true
 
 [node name="InstallButton" type="Button" parent="box/right/controls"]
 modulate = Color( 0.772549, 1, 0.741176, 1 )
@@ -186,6 +193,14 @@ margin_right = 516.0
 margin_bottom = 30.0
 text = "Update"
 icon = ExtResource( 5 )
+
+[node name="variables_title" type="Label" parent="box/right"]
+visible = false
+margin_top = 86.0
+margin_right = 516.0
+margin_bottom = 100.0
+text = "Plugin variables"
+align = 1
 [connection signal="pressed" from="box/right/controls/InstallButton" to="." method="_on_InstallButton_pressed"]
 [connection signal="pressed" from="box/right/controls/UninstallButton" to="." method="_on_UninstallButton_pressed"]
 [connection signal="pressed" from="box/right/controls/UpdateButton" to="." method="_on_UpdateButton_pressed"]

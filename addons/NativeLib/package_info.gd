@@ -7,6 +7,9 @@ signal update(package)
 
 var _info : Dictionary = {}
 var _local : Dictionary = {}
+var _variables:= []
+
+const plugin_variable = preload('res://addons/NativeLib/plugin_variable.tscn')
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -17,6 +20,9 @@ func _ready() -> void:
 #    pass
 
 func init_info(info: Dictionary, local: Dictionary) -> void:
+    for v in _variables:
+        v.queue_free()
+    _variables = []
     _info = info
     _local = local
     $box/left/plugin/name.text = info.name
@@ -48,6 +54,19 @@ func init_info(info: Dictionary, local: Dictionary) -> void:
     $box/right/controls/InstallButton.visible = not installed
     $box/right/controls/UpdateButton.visible = not latest and installed
     $box/right/controls/UninstallButton.visible = installed
+    if 'dependencies' in _local:
+        $box/right/controls/deps.text = 'Dependencies: %s'%PoolStringArray(_local.dependencies).join(', ')
+    else:
+        $box/right/controls/deps.text = ''
+    if 'variables' in _local:
+        $box/right/variables_title.show()
+        for key in _local.variables:
+            var vh = plugin_variable.instance()
+            $box/right.add_child(vh)
+            _variables.append(vh)
+            vh.setup(key, _local.variables[key])
+    else:
+        $box/right/variables_title.hide()
 
 func _on_InstallButton_pressed() -> void:
     emit_signal('install', _info.name)
