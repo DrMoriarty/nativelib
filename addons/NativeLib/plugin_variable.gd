@@ -11,9 +11,10 @@ func _ready() -> void:
 #func _process(delta: float) -> void:
 #    pass
 
-func setup(variable: String, description: String) -> void:
+func setup(variable: String, params: Dictionary) -> void:
     _var_name = variable
-    $var_desc.text = description
+    if 'info' in params:
+        $var_desc.text = params.info
     if ProjectSettings.has_setting(variable):
         update_variable(ProjectSettings.get_setting(variable))
     else:

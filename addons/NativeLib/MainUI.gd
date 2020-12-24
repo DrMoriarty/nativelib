@@ -158,12 +158,20 @@ func _on_plugin_install(package: String) -> void:
             var info = _PROJECT.packages[package]
             if 'android_module' in info:
                 add_android_module(info.android_module)
+            if 'autoload' in info:
+                for key in info.autoload:
+                    var ss = 'autoload/%s'%key
+                    if not ProjectSettings.has_setting(ss):
+                        ProjectSettings.set_setting(ss, info.autoload[key])
 
 func _on_plugin_uninstall(package: String) -> void:
     if package in _PROJECT.packages:
         var local = _PROJECT.packages[package]
         if 'android_module' in local:
             remove_android_module(local.android_module)
+        if 'autoload' in local:
+            for key in local.autoload:
+                ProjectSettings.set_setting('autoload/%s'%key, null)
     nativelib(['--uninstall', package])
     load_project()
     update_plugin_list()

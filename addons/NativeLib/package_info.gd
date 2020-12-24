@@ -55,7 +55,7 @@ func init_info(info: Dictionary, local: Dictionary) -> void:
     $box/right/controls/UpdateButton.visible = not latest and installed
     $box/right/controls/UninstallButton.visible = installed
     if 'dependencies' in _local:
-        $box/right/controls/deps.text = 'Dependencies: %s'%PoolStringArray(_local.dependencies).join(', ')
+        $box/right/controls/deps.text = 'Depends on: %s'%PoolStringArray(_local.dependencies).join(', ')
     else:
         $box/right/controls/deps.text = ''
     if 'variables' in _local:
