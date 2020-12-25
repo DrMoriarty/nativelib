@@ -150,9 +150,8 @@ func _on_UpdateRepoButton_pressed() -> void:
 func _on_plugin_install(package: String) -> void:
     nativelib(['--install', package])
     load_project()
-    update_plugin_list()
     update_status()
-    # install all new android modules
+    # update settings for new packages
     if 'packages' in _PROJECT:
         for package in _PROJECT.packages:
             var info = _PROJECT.packages[package]
@@ -163,6 +162,13 @@ func _on_plugin_install(package: String) -> void:
                     var ss = 'autoload/%s'%key
                     if not ProjectSettings.has_setting(ss):
                         ProjectSettings.set_setting(ss, info.autoload[key])
+            if 'variables' in info:
+                for key in info.variables:
+                    if 'default' in info.variables[key]:
+                        var def_value = info.variables[key]['default']
+                        if not ProjectSettings.has_setting(key):
+                            ProjectSettings.set_setting(key, def_value)
+    update_plugin_list()
 
 func _on_plugin_uninstall(package: String) -> void:
     if package in _PROJECT.packages:
