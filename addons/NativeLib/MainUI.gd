@@ -4,7 +4,7 @@ extends Control
 const package_info = preload('res://addons/NativeLib/package_info.tscn')
 const _global_nativelib := '/usr/local/bin/nativelib'
 const _local_nativelib := 'addons/NativeLib/nativelib'
-const _remote_url := 'https://raw.githubusercontent.com/DrMoriarty/nativelib-cli/HEAD/nativelib'
+const _remote_url := 'https://raw.githubusercontent.com/DrMoriarty/nativelib-cli/HEAD/nativelib+11'
 
 var _STORAGE := {}
 var _PROJECT := {}
@@ -109,12 +109,18 @@ func update_system_info() -> void:
     $view/status/InstallSystemButton.visible = _NL_GLOBAL
     $view/status/UpdateSystemButton.visible = not _NL_GLOBAL
     var output = nativelib(['--version'], false)
+    var ver = output[0].replace('\n', '')
     var s = ''
-    if _NL_GLOBAL:
+    var err := false
+    if ver == '':
+        s = 'NativeLib not found!'
+        err = true
+    elif _NL_GLOBAL:
         s = 'Global NativeLib'
     else:
         s = 'Local NativeLib'
-    $view/status/system.text = '%s %s'%[s, output[0].replace('\n', '')]
+    $view/status/system.text = '%s %s'%[s, ver]
+    $view/status/system.modulate = Color.red if err else Color.white
 
 func update_status() -> void:
     $view/status/info.text = '%d packages in repository, %d installed'%[_STORAGE.keys().size(), get_installed_packages().size()]
@@ -133,7 +139,9 @@ func _http_request_completed(result, response_code, headers, body) -> void:
         push_error('HTTP response code: %d'%response_code)
     else:
         var f = File.new()
-        f.open('res://'+_local_nativelib, File.WRITE)
+        if f.open('res://'+_local_nativelib, File.WRITE) != OK:
+            push_error('Can not save NativeLib to file %s'%['res://'+_local_nativelib])
+            return
         f.store_buffer(body)
         f.close()
         run_command('chmod', ['+x', _local_nativelib])
@@ -196,10 +204,12 @@ func nativelib(params: Array, show_output: bool = true) -> Array:
 func run_command(cmd: String, params: Array, show_output: bool = true) -> Array:
     #print('%s %s'%[cmd, params])
     var output := []
-    OS.execute(cmd, params, true, output)
+    var exit_code = OS.execute(cmd, params, true, output)
     if show_output:
         for line in output:
             print(line)
+    if exit_code != 0:
+        push_error('Command %s, exit code %d'%[cmd, exit_code])
     return output
 
 func _on_InstallSystemButton_pressed() -> void:
