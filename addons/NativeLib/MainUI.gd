@@ -144,8 +144,8 @@ func _http_request_completed(result, response_code, headers, body) -> void:
             return
         f.store_buffer(body)
         f.close()
-        run_command('chmod', ['+x', _local_nativelib])
-        print('Installed %s'%_local_nativelib)
+        #run_command('chmod', ['+x', _local_nativelib])
+        print('Installed %s (%d bytes)'%[_local_nativelib, body.size()])
         _NL_GLOBAL = false
     emit_signal('downloading_complete')
 
@@ -199,17 +199,21 @@ func _on_plugin_update(package: String) -> void:
     update_status()
 
 func nativelib(params: Array, show_output: bool = true) -> Array:
-    return run_command(_global_nativelib if _NL_GLOBAL else _local_nativelib, params, show_output)
+    if _NL_GLOBAL:
+        return run_command(_global_nativelib, params, show_output)
+    else:
+        params.push_front(_local_nativelib)
+        return run_command('python', params, show_output)
 
 func run_command(cmd: String, params: Array, show_output: bool = true) -> Array:
     #print('%s %s'%[cmd, params])
     var output := []
     var exit_code = OS.execute(cmd, params, true, output)
-    if show_output:
-        for line in output:
-            print(line)
     if exit_code != 0:
         push_error('Command %s, exit code %d'%[cmd, exit_code])
+    if show_output or exit_code != 0:
+        for line in output:
+            print(line)
     return output
 
 func _on_InstallSystemButton_pressed() -> void:
