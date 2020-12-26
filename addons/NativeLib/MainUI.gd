@@ -4,7 +4,7 @@ extends Control
 const package_info = preload('res://addons/NativeLib/package_info.tscn')
 const _global_nativelib := '/usr/local/bin/nativelib'
 const _local_nativelib := 'addons/NativeLib/nativelib'
-const _remote_url := 'https://raw.githubusercontent.com/DrMoriarty/nativelib-cli/HEAD/nativelib+11'
+const _remote_url := 'https://raw.githubusercontent.com/DrMoriarty/nativelib-cli/HEAD/nativelib'
 
 var _STORAGE := {}
 var _PROJECT := {}
