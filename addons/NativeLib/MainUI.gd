@@ -10,6 +10,8 @@ var _STORAGE := {}
 var _PROJECT := {}
 var _filter := ''
 var _NL_GLOBAL := true
+var _platform_filter := []
+var _name_filter := ''
 
 signal downloading_complete
 
@@ -79,8 +81,30 @@ func load_project() -> void:
 func update_plugin_list() -> void:
     for ch in $view/panel/scroll/margin/list.get_children():
         ch.queue_free()
-    for plugin in _STORAGE:
+    var keys = _STORAGE.keys()
+    keys.sort()
+    for plugin in keys:
         var info = _STORAGE[plugin]
+        var platforms = []
+        var files = info.versions[info.latest_version]
+        for f in files:
+            var fns = f.name.split('_')
+            var pls = fns[-1].split('.')
+            platforms.append(pls[0])
+        var filtered_out := false
+        if _platform_filter.size() > 0:
+            for pl in _platform_filter:
+                if not pl in platforms:
+                    filtered_out = true
+                    break
+        if _name_filter.length() > 0:
+            var ff = _name_filter.to_lower()
+            var nn = info.name.to_lower()
+            var dd = info.description.to_lower()
+            if nn.find(ff) < 0 and dd.find(ff) < 0:
+                filtered_out = true
+        if filtered_out:
+            continue
         var pi = package_info.instance()
         var local = {}
         if 'packages' in _PROJECT:
@@ -148,6 +172,7 @@ func _http_request_completed(result, response_code, headers, body) -> void:
         print('Installed %s (%d bytes)'%[_local_nativelib, body.size()])
         _NL_GLOBAL = false
     emit_signal('downloading_complete')
+    get_node('HTTP').queue_free()
 
 func _on_UpdateRepoButton_pressed() -> void:
     nativelib(['--update'])
@@ -255,3 +280,37 @@ func add_android_module(module: String) -> void:
     if not module in modules:
         modules.append(module)
         ProjectSettings.set_setting('android/modules', PoolStringArray(modules).join(','))
+
+func _on_FilterUniversal_toggled(button_pressed: bool) -> void:
+    if button_pressed:
+        if not 'all' in _platform_filter:
+            _platform_filter.append('all')
+            update_plugin_list()
+    else:
+        if 'all' in _platform_filter:
+            _platform_filter.erase('all')
+            update_plugin_list()
+
+func _on_FilterAndroid_toggled(button_pressed: bool) -> void:
+    if button_pressed:
+        if not 'android' in _platform_filter:
+            _platform_filter.append('android')
+            update_plugin_list()
+    else:
+        if 'android' in _platform_filter:
+            _platform_filter.erase('android')
+            update_plugin_list()
+
+func _on_FilterIOS_toggled(button_pressed: bool) -> void:
+    if button_pressed:
+        if not 'ios' in _platform_filter:
+            _platform_filter.append('ios')
+            update_plugin_list()
+    else:
+        if 'ios' in _platform_filter:
+            _platform_filter.erase('ios')
+            update_plugin_list()
+
+func _on_SearchLineEdit_text_changed(new_text: String) -> void:
+    _name_filter = new_text
+    update_plugin_list()
