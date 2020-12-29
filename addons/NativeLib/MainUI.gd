@@ -113,7 +113,7 @@ func load_storage() -> void:
     var storage_path = '%s/../.nativelib/storage'%path
     var f = File.new()
     if f.open(storage_path, File.READ) != OK:
-        push_error('NativeLib repository not found!')
+        push_error('NativeLib repository not found! Search at %s'%storage_path)
         return
     var content = f.get_as_text()
     f.close()
