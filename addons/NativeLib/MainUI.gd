@@ -2,7 +2,6 @@ tool
 extends Control
 
 const package_info = preload('res://addons/NativeLib/package_info.tscn')
-const _global_nativelib := '/usr/local/bin/nativelib'
 const _local_nativelib := 'addons/NativeLib/nativelib'
 const _remote_url := 'https://raw.githubusercontent.com/DrMoriarty/nativelib-cli/HEAD/nativelib'
 
@@ -12,12 +11,17 @@ var _filter := ''
 var _NL_GLOBAL := true
 var _platform_filter := []
 var _name_filter := ''
+var _nativelib_path := '/usr/local/bin/nativelib'
+var _python_path := 'python'
 
 signal downloading_complete
 
+enum Errors {NO_ERROR = 0, NATIVELIB_ERROR = 1, PYTHON_ERROR = 2}
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-    pass # Replace with function body.
+    if ProjectSettings.has_setting('NativeLib/Python'):
+        _python_path = ProjectSettings.get_setting('NativeLib/Python')
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta: float) -> void:
@@ -26,27 +30,81 @@ func _ready() -> void:
 func save_data() -> void:
     pass
 
-func check_nativelib() -> bool:
+func show_global_error(err: String) -> void:
+    $view/panel/error.text = err
+    $view/panel/error.show()
+    $view/panel/scroll.hide()
+
+func hide_global_error() -> void:
+    $view/panel/error.hide()
+    $view/panel/scroll.show()
+
+func check_system() -> int:
+    hide_global_error()
+    var err = Errors.NO_ERROR
+    var python = run_command(_python_path, ['--version'], false)
+    var python_ver = python[0].replace('\n', '')
+    if python_ver == '':
+        show_global_error('Python not found. You should install python into your system and setup it\'s path.')
+        $view/status/python.text = 'Python not found'
+        $view/status/python.modulate = Color.red
+        err = Errors.PYTHON_ERROR
+    else:
+        $view/status/python.text = python_ver
+        $view/status/python.modulate = Color.white
+    
     var f = File.new()
     if f.file_exists('res://'+_local_nativelib):
         _NL_GLOBAL = false
-        return true
-    if f.file_exists(_global_nativelib):
+    elif f.file_exists(_nativelib_path):
         _NL_GLOBAL = true
-        return true
-    return false
+    var output = nativelib(['--version'], false)
+    var ver = output[0].replace('\n', '')
+    var s = ''
+    var col := Color.white
+    if ver == '':
+        s = 'NativeLib not found'
+        col = Color.red
+        err = max(err, Errors.NATIVELIB_ERROR)
+        $view/status/InstallSystemButton.visible = true
+        $view/status/UpdateSystemButton.visible = false
+    elif _NL_GLOBAL:
+        s = 'NativeLib'
+        col = Color.lightblue
+        err = Errors.NO_ERROR
+        $view/status/InstallSystemButton.visible = true
+        $view/status/UpdateSystemButton.visible = false
+    else:
+        s = 'NativeLib'
+        col = Color.lightgreen
+        err = Errors.NO_ERROR
+        $view/status/InstallSystemButton.visible = false
+        $view/status/UpdateSystemButton.visible = true
+    $view/status/system.text = '%s %s'%[s, ver]
+    $view/status/system.modulate = col
+    if err == Errors.NO_ERROR:
+        hide_global_error()
+    return err
 
 func set_editor(editor: EditorPlugin) -> void:
     yield(get_tree(), 'idle_frame')
-    if not check_nativelib():
-        push_warning('NativeLib not installed in system. Making a local copy...')
-        install_local_nativelib()
-        yield(self, 'downloading_complete')
-        nativelib(['--update'])
+    var err = check_system()
+    match err:
+        Errors.PYTHON_ERROR:
+            return
+        Errors.NATIVELIB_ERROR:
+            push_warning('NativeLib not installed in system. Making a local copy...')
+            install_local_nativelib()
+            yield(self, 'downloading_complete')
+            if check_system() != Errors.NO_ERROR:
+                return
+            nativelib(['--update'])
+        Errors.NO_ERROR:
+            pass
     load_storage()
     nativelib(['--prepare'])
     load_project()
-    update_system_info()
+    update_project_info()
     update_plugin_list()
     update_status()
 
@@ -123,28 +181,13 @@ func get_installed_packages() -> Array:
             result.append(p)
     return result
 
-func update_system_info() -> void:
+func update_project_info() -> void:
     if 'platforms' in _PROJECT:
-        $view/status/iOSButton.pressed = 'ios' in _PROJECT.platforms
-        $view/status/AndroidButton.pressed = 'android' in _PROJECT.platforms
+        $view/project/iOSButton.pressed = 'ios' in _PROJECT.platforms
+        $view/project/AndroidButton.pressed = 'android' in _PROJECT.platforms
     else:
-        $view/status/iOSButton.pressed = false
-        $view/status/AndroidButton.pressed = false
-    $view/status/InstallSystemButton.visible = _NL_GLOBAL
-    $view/status/UpdateSystemButton.visible = not _NL_GLOBAL
-    var output = nativelib(['--version'], false)
-    var ver = output[0].replace('\n', '')
-    var s = ''
-    var err := false
-    if ver == '':
-        s = 'NativeLib not found!'
-        err = true
-    elif _NL_GLOBAL:
-        s = 'Global NativeLib'
-    else:
-        s = 'Local NativeLib'
-    $view/status/system.text = '%s %s'%[s, ver]
-    $view/status/system.modulate = Color.red if err else Color.white
+        $view/project/iOSButton.pressed = false
+        $view/project/AndroidButton.pressed = false
 
 func update_status() -> void:
     $view/status/info.text = '%d packages in repository, %d installed'%[_STORAGE.keys().size(), get_installed_packages().size()]
@@ -225,10 +268,14 @@ func _on_plugin_update(package: String) -> void:
 
 func nativelib(params: Array, show_output: bool = true) -> Array:
     if _NL_GLOBAL:
-        return run_command(_global_nativelib, params, show_output)
+        if OS.get_name() == 'Windows':
+            params.push_front(_nativelib_path)
+            return run_command(_python_path, params, show_output)
+        else:
+            return run_command(_nativelib_path, params, show_output)
     else:
         params.push_front(_local_nativelib)
-        return run_command('python', params, show_output)
+        return run_command(_python_path, params, show_output)
 
 func run_command(cmd: String, params: Array, show_output: bool = true) -> Array:
     #print('%s %s'%[cmd, params])
@@ -244,22 +291,22 @@ func run_command(cmd: String, params: Array, show_output: bool = true) -> Array:
 func _on_InstallSystemButton_pressed() -> void:
     install_local_nativelib()
     yield(self, 'downloading_complete')
-    update_system_info()
+    check_system()
 
 func _on_UpdateSystemButton_pressed() -> void:
     install_local_nativelib()
     yield(self, 'downloading_complete')
-    update_system_info()
+    check_system()
 
 func _on_AndroidButton_toggled(button_pressed: bool) -> void:
     nativelib(['--android'], false)
     load_project()
-    update_system_info()
+    update_project_info()
 
 func _on_iOSButton_toggled(button_pressed: bool) -> void:
     nativelib(['--ios'], false)
     load_project()
-    update_system_info()
+    update_project_info()
 
 func remove_android_module(module: String) -> void:
     var modules := []
@@ -314,3 +361,11 @@ func _on_FilterIOS_toggled(button_pressed: bool) -> void:
 func _on_SearchLineEdit_text_changed(new_text: String) -> void:
     _name_filter = new_text
     update_plugin_list()
+
+func _on_SelectPythonButton_pressed() -> void:
+    $PythonDialog.popup_centered()
+
+func _on_PythonDialog_file_selected(path: String) -> void:
+    _python_path = path
+    ProjectSettings.set_setting('NativeLib/Python', _python_path)
+    check_system()

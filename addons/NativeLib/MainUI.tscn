@@ -9,8 +9,14 @@
 [ext_resource path="res://addons/NativeLib/icons/universal_platform.svg" type="Texture" id=7]
 
 [node name="MainUI" type="MarginContainer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -321.0
+margin_top = -312.0
+margin_right = 321.0
+margin_bottom = 312.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 4
@@ -25,8 +31,8 @@ __meta__ = {
 [node name="view" type="VBoxContainer" parent="."]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 716.0
-margin_bottom = 1276.0
+margin_right = 638.0
+margin_bottom = 620.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 4
@@ -34,14 +40,52 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="project" type="HBoxContainer" parent="view"]
+margin_right = 634.0
+margin_bottom = 40.0
+
+[node name="Label" type="Label" parent="view/project"]
+margin_top = 13.0
+margin_right = 114.0
+margin_bottom = 27.0
+text = "Project platforms:"
+
+[node name="AndroidButton" type="CheckButton" parent="view/project"]
+margin_left = 118.0
+margin_right = 209.0
+margin_bottom = 40.0
+hint_tooltip = "Enable Android for project"
+icon = ExtResource( 3 )
+
+[node name="iOSButton" type="CheckButton" parent="view/project"]
+margin_left = 213.0
+margin_right = 304.0
+margin_bottom = 40.0
+hint_tooltip = "Enable iOS for project"
+icon = ExtResource( 4 )
+
+[node name="Label2" type="Label" parent="view/project"]
+margin_left = 308.0
+margin_top = 13.0
+margin_right = 531.0
+margin_bottom = 27.0
+size_flags_horizontal = 3
+
+[node name="SelectPythonButton" type="Button" parent="view/project"]
+margin_left = 535.0
+margin_right = 634.0
+margin_bottom = 40.0
+text = "Select python"
+
 [node name="top" type="HBoxContainer" parent="view"]
-margin_right = 712.0
-margin_bottom = 26.0
+margin_top = 44.0
+margin_right = 634.0
+margin_bottom = 70.0
 size_flags_horizontal = 3
 custom_constants/separation = 4
 
 [node name="SearchLineEdit" type="LineEdit" parent="view/top"]
-margin_right = 464.0
+margin_right = 386.0
 margin_bottom = 26.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -53,37 +97,37 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="view/top"]
-margin_left = 468.0
+margin_left = 390.0
 margin_top = 6.0
-margin_right = 582.0
+margin_right = 504.0
 margin_bottom = 20.0
 text = "Filter by platform:"
 
 [node name="FilterUniversal" type="CheckBox" parent="view/top"]
-margin_left = 586.0
-margin_right = 626.0
+margin_left = 508.0
+margin_right = 548.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for universal platform."
 icon = ExtResource( 7 )
 
 [node name="FilterAndroid" type="CheckBox" parent="view/top"]
-margin_left = 630.0
-margin_right = 669.0
+margin_left = 552.0
+margin_right = 591.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for Android platform."
 icon = ExtResource( 3 )
 
 [node name="FilterIOS" type="CheckBox" parent="view/top"]
-margin_left = 673.0
-margin_right = 712.0
+margin_left = 595.0
+margin_right = 634.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for iOS platform."
 icon = ExtResource( 4 )
 
 [node name="panel" type="Panel" parent="view"]
-margin_top = 30.0
-margin_right = 712.0
-margin_bottom = 1228.0
+margin_top = 74.0
+margin_right = 634.0
+margin_bottom = 590.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -99,8 +143,8 @@ __meta__ = {
 }
 
 [node name="margin" type="MarginContainer" parent="view/panel/scroll"]
-margin_right = 712.0
-margin_bottom = 1198.0
+margin_right = 634.0
+margin_bottom = 516.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 4
@@ -111,48 +155,50 @@ custom_constants/margin_bottom = 4
 [node name="list" type="VBoxContainer" parent="view/panel/scroll/margin"]
 margin_left = 4.0
 margin_top = 4.0
-margin_right = 708.0
-margin_bottom = 1194.0
+margin_right = 630.0
+margin_bottom = 512.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 16
 
+[node name="error" type="Label" parent="view/panel"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="status" type="HBoxContainer" parent="view"]
-margin_top = 1232.0
-margin_right = 712.0
-margin_bottom = 1272.0
+margin_top = 594.0
+margin_right = 634.0
+margin_bottom = 616.0
 custom_constants/separation = 4
 
 [node name="info" type="Label" parent="view/status"]
-margin_top = 13.0
-margin_right = 329.0
-margin_bottom = 27.0
+margin_top = 4.0
+margin_right = 437.0
+margin_bottom = 18.0
 size_flags_horizontal = 3
 
-[node name="AndroidButton" type="CheckButton" parent="view/status"]
-margin_left = 333.0
-margin_right = 424.0
-margin_bottom = 40.0
-hint_tooltip = "Enable Android for project"
-icon = ExtResource( 3 )
-
-[node name="iOSButton" type="CheckButton" parent="view/status"]
-margin_left = 428.0
-margin_right = 519.0
-margin_bottom = 40.0
-hint_tooltip = "Enable iOS for project"
-icon = ExtResource( 4 )
+[node name="python" type="Label" parent="view/status"]
+margin_left = 441.0
+margin_top = 4.0
+margin_right = 441.0
+margin_bottom = 18.0
 
 [node name="system" type="Label" parent="view/status"]
-margin_left = 523.0
-margin_top = 13.0
-margin_right = 523.0
-margin_bottom = 27.0
+margin_left = 445.0
+margin_top = 4.0
+margin_right = 445.0
+margin_bottom = 18.0
 
 [node name="InstallSystemButton" type="Button" parent="view/status"]
-margin_left = 527.0
-margin_right = 644.0
-margin_bottom = 40.0
+margin_left = 449.0
+margin_right = 566.0
+margin_bottom = 22.0
 hint_tooltip = "Install local copy of NativeLib-CLI utility."
 text = "NativeLib-CLI"
 icon = ExtResource( 6 )
@@ -167,18 +213,34 @@ text = "NativeLib-CLI"
 icon = ExtResource( 5 )
 
 [node name="UpdateRepoButton" type="Button" parent="view/status"]
-margin_left = 648.0
-margin_right = 712.0
-margin_bottom = 40.0
+margin_left = 570.0
+margin_right = 634.0
+margin_bottom = 22.0
 hint_tooltip = "Fetch info about all available plugins and store it in your local repository."
 text = "REPO"
 icon = ExtResource( 5 )
+
+[node name="PythonDialog" type="FileDialog" parent="."]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 638.0
+margin_bottom = 620.0
+popup_exclusive = true
+window_title = "Python"
+resizable = true
+dialog_text = "Select python executable"
+mode = 0
+access = 2
+current_dir = "/Users/vasya/projects/trawler.io"
+current_path = "/Users/vasya/projects/trawler.io/"
+[connection signal="toggled" from="view/project/AndroidButton" to="." method="_on_AndroidButton_toggled"]
+[connection signal="toggled" from="view/project/iOSButton" to="." method="_on_iOSButton_toggled"]
+[connection signal="pressed" from="view/project/SelectPythonButton" to="." method="_on_SelectPythonButton_pressed"]
 [connection signal="text_changed" from="view/top/SearchLineEdit" to="." method="_on_SearchLineEdit_text_changed"]
 [connection signal="toggled" from="view/top/FilterUniversal" to="." method="_on_FilterUniversal_toggled"]
 [connection signal="toggled" from="view/top/FilterAndroid" to="." method="_on_FilterAndroid_toggled"]
 [connection signal="toggled" from="view/top/FilterIOS" to="." method="_on_FilterIOS_toggled"]
-[connection signal="toggled" from="view/status/AndroidButton" to="." method="_on_AndroidButton_toggled"]
-[connection signal="toggled" from="view/status/iOSButton" to="." method="_on_iOSButton_toggled"]
 [connection signal="pressed" from="view/status/InstallSystemButton" to="." method="_on_InstallSystemButton_pressed"]
 [connection signal="pressed" from="view/status/UpdateSystemButton" to="." method="_on_UpdateSystemButton_pressed"]
 [connection signal="pressed" from="view/status/UpdateRepoButton" to="." method="_on_UpdateRepoButton_pressed"]
+[connection signal="file_selected" from="PythonDialog" to="." method="_on_PythonDialog_file_selected"]
