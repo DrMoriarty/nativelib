@@ -13,6 +13,7 @@ var _platform_filter := []
 var _name_filter := ''
 var _nativelib_path := '/usr/local/bin/nativelib'
 var _python_path := 'python'
+onready var _home_path := '%s/../'%OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP)
 
 signal downloading_complete
 
@@ -52,6 +53,11 @@ func check_system() -> int:
     else:
         $view/status/python.text = python_ver
         $view/status/python.modulate = Color.white
+        # get home path
+        var pp = run_command(_python_path, ['-c', "import os; print(os.path.expanduser('~'));"], false)
+        var hp = pp[0].replace('\n', '')
+        if hp != '':
+            _home_path = hp
     
     var f = File.new()
     if f.file_exists('res://'+_local_nativelib):
@@ -109,8 +115,7 @@ func set_editor(editor: EditorPlugin) -> void:
     update_status()
 
 func load_storage() -> void:
-    var path = OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP)
-    var storage_path = '%s/../.nativelib/storage'%path
+    var storage_path = '%s/.nativelib/storage'%_home_path
     var f = File.new()
     if f.open(storage_path, File.READ) != OK:
         push_error('NativeLib repository not found! Search at %s'%storage_path)
@@ -280,7 +285,7 @@ func nativelib(params: Array, show_output: bool = true) -> Array:
 func run_command(cmd: String, params: Array, show_output: bool = true) -> Array:
     #print('%s %s'%[cmd, params])
     var output := []
-    var exit_code = OS.execute(cmd, params, true, output)
+    var exit_code = OS.execute(cmd, params, true, output, true)
     if exit_code != 0:
         push_error('Command %s, exit code %d'%[cmd, exit_code])
     if show_output or exit_code != 0:
