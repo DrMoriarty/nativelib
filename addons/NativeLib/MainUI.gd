@@ -11,7 +11,7 @@ var _filter := ''
 var _NL_GLOBAL := true
 var _platform_filter := []
 var _name_filter := ''
-var _nativelib_path := '/usr/local/bin/nativelib'
+var _nativelib_path := 'nativelib'
 var _python_path := 'python'
 onready var _home_path := '%s/../'%OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP)
 
@@ -291,7 +291,10 @@ func run_command(cmd: String, params: Array, show_output: bool = true) -> Array:
     if show_output or exit_code != 0:
         for line in output:
             print(line)
-    return output
+    if exit_code != 0:
+        return ['']
+    else:
+        return output
 
 func _on_InstallSystemButton_pressed() -> void:
     install_local_nativelib()
