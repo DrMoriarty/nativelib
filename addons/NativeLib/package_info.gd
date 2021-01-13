@@ -26,6 +26,7 @@ func init_info(info: Dictionary, local: Dictionary) -> void:
     _info = info
     _local = local
     $box/left/plugin/name.text = info.name
+    $box/left/license.text = 'License: %s'%info.license
     $box/left/version.text = 'Latest: %s'%info.latest_version
     var platforms = []
     var files = info.versions[info.latest_version]
@@ -46,7 +47,7 @@ func init_info(info: Dictionary, local: Dictionary) -> void:
         $box/left/installed/ios.visible = 'ios' in local.platforms
         $box/left/installed/universal.visible = 'all' in local.platforms
     else:
-        $box/left/installed/version.text = 'Not installed'
+        $box/left/installed/version.text = ''
         $box/left/installed/android.visible = false
         $box/left/installed/ios.visible = false
         $box/left/installed/universal.visible = false
@@ -76,3 +77,7 @@ func _on_UninstallButton_pressed() -> void:
 
 func _on_UpdateButton_pressed() -> void:
     emit_signal('update', _info.name)
+
+func _on_InfoButton_pressed() -> void:
+    if 'url' in _info:
+        OS.shell_open(_info.url)

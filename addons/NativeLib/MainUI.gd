@@ -11,6 +11,7 @@ var _filter := ''
 var _NL_GLOBAL := true
 var _platform_filter := []
 var _name_filter := ''
+var _installed_filter := false
 var _nativelib_path := 'nativelib'
 var _python_path := 'python'
 onready var _home_path := '%s/../'%OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP)
@@ -166,13 +167,16 @@ func update_plugin_list() -> void:
             var dd = info.description.to_lower()
             if nn.find(ff) < 0 and dd.find(ff) < 0:
                 filtered_out = true
+        var local = {}
+        var installed := false
+        if 'packages' in _PROJECT and plugin in _PROJECT.packages:
+            local = _PROJECT.packages[plugin]
+            installed = true
+        if _installed_filter and not installed:
+            filtered_out = true
         if filtered_out:
             continue
         var pi = package_info.instance()
-        var local = {}
-        if 'packages' in _PROJECT:
-            if plugin in _PROJECT.packages:
-                local = _PROJECT.packages[plugin]
         pi.init_info(info, local)
         pi.connect('install', self, '_on_plugin_install')
         pi.connect('uninstall', self, '_on_plugin_uninstall')
@@ -377,3 +381,7 @@ func _on_PythonDialog_file_selected(path: String) -> void:
     _python_path = path
     ProjectSettings.set_setting('NativeLib/Python', _python_path)
     check_system()
+
+func _on_FilterInstalled_toggled(button_pressed: bool) -> void:
+    _installed_filter = button_pressed
+    update_plugin_list()

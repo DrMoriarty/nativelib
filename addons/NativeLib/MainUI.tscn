@@ -85,7 +85,7 @@ size_flags_horizontal = 3
 custom_constants/separation = 4
 
 [node name="SearchLineEdit" type="LineEdit" parent="view/top"]
-margin_right = 386.0
+margin_right = 417.0
 margin_bottom = 26.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -97,32 +97,39 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="view/top"]
-margin_left = 390.0
+margin_left = 421.0
 margin_top = 6.0
-margin_right = 504.0
+margin_right = 458.0
 margin_bottom = 20.0
-text = "Filter by platform:"
+text = "Filter:"
 
 [node name="FilterUniversal" type="CheckBox" parent="view/top"]
-margin_left = 508.0
-margin_right = 548.0
+margin_left = 462.0
+margin_right = 502.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for universal platform."
 icon = ExtResource( 7 )
 
 [node name="FilterAndroid" type="CheckBox" parent="view/top"]
-margin_left = 552.0
-margin_right = 591.0
+margin_left = 506.0
+margin_right = 545.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for Android platform."
 icon = ExtResource( 3 )
 
 [node name="FilterIOS" type="CheckBox" parent="view/top"]
-margin_left = 595.0
-margin_right = 634.0
+margin_left = 549.0
+margin_right = 588.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for iOS platform."
 icon = ExtResource( 4 )
+
+[node name="FilterInstalled" type="CheckBox" parent="view/top"]
+margin_left = 592.0
+margin_right = 634.0
+margin_bottom = 26.0
+hint_tooltip = "Show only installed plugins."
+icon = ExtResource( 6 )
 
 [node name="panel" type="Panel" parent="view"]
 margin_top = 74.0
@@ -226,13 +233,14 @@ margin_top = 4.0
 margin_right = 638.0
 margin_bottom = 620.0
 popup_exclusive = true
-window_title = "Python"
+window_title = "Открыть файл"
 resizable = true
 dialog_text = "Select python executable"
 mode = 0
 access = 2
 current_dir = "/Users/vasya/projects/trawler.io"
 current_path = "/Users/vasya/projects/trawler.io/"
+
 [connection signal="toggled" from="view/project/AndroidButton" to="." method="_on_AndroidButton_toggled"]
 [connection signal="toggled" from="view/project/iOSButton" to="." method="_on_iOSButton_toggled"]
 [connection signal="pressed" from="view/project/SelectPythonButton" to="." method="_on_SelectPythonButton_pressed"]
@@ -240,6 +248,7 @@ current_path = "/Users/vasya/projects/trawler.io/"
 [connection signal="toggled" from="view/top/FilterUniversal" to="." method="_on_FilterUniversal_toggled"]
 [connection signal="toggled" from="view/top/FilterAndroid" to="." method="_on_FilterAndroid_toggled"]
 [connection signal="toggled" from="view/top/FilterIOS" to="." method="_on_FilterIOS_toggled"]
+[connection signal="toggled" from="view/top/FilterInstalled" to="." method="_on_FilterInstalled_toggled"]
 [connection signal="pressed" from="view/status/InstallSystemButton" to="." method="_on_InstallSystemButton_pressed"]
 [connection signal="pressed" from="view/status/UpdateSystemButton" to="." method="_on_UpdateSystemButton_pressed"]
 [connection signal="pressed" from="view/status/UpdateRepoButton" to="." method="_on_UpdateRepoButton_pressed"]
