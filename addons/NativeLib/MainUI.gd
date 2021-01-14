@@ -5,7 +5,7 @@ const package_info = preload('res://addons/NativeLib/package_info.tscn')
 const _local_nativelib := 'addons/NativeLib/nativelib'
 const _remote_url := 'https://raw.githubusercontent.com/DrMoriarty/nativelib-cli/HEAD/nativelib'
 
-var _STORAGE := {}
+var _INDEX := {}
 var _PROJECT := {}
 var _filter := ''
 var _NL_GLOBAL := true
@@ -116,18 +116,37 @@ func set_editor(editor: EditorPlugin) -> void:
     update_status()
 
 func load_storage() -> void:
-    var storage_path = '%s/.nativelib/storage'%_home_path
-    var f = File.new()
-    if f.open(storage_path, File.READ) != OK:
-        push_error('NativeLib repository not found! Search at %s'%storage_path)
-        return
-    var content = f.get_as_text()
-    f.close()
-    var result = JSON.parse(content)
-    if result.error == OK:
-        _STORAGE = result.result
+    var _ind = {}
+    var index_path = '%s/.nativelib/meta'%_home_path
+    var dir = Directory.new()
+    if dir.open(index_path) == OK:
+        dir.list_dir_begin()
+        var file_name = dir.get_next()
+        while file_name != '':
+            if dir.current_is_dir() and not file_name.begins_with('.'):
+                _ind[file_name] = {}
+                var pack = dir.get_current_dir() + "/" + file_name
+                var dir2 = Directory.new()
+                if dir2.open(pack) == OK:
+                    dir2.list_dir_begin()
+                    var pack_var = dir2.get_next()
+                    while pack_var != '':
+                        if not dir2.current_is_dir():
+                            var fname = dir2.get_current_dir() + "/" + pack_var
+                            var f = File.new()
+                            if f.open(fname, File.READ) == OK:
+                                var content = f.get_as_text()
+                                f.close()
+                                var result = JSON.parse(content)
+                                if result.error == OK:
+                                    _ind[file_name][result.result.version] = result.result
+                        pack_var = dir2.get_next()
+            file_name = dir.get_next()
     else:
-        push_error('Can not read NativeLib storage. Is it correctly installed?')
+        push_error('NativeLib repository not found! Search at %s'%index_path)
+        push_error('Try to update repository info (button "REPO")')
+        return
+    _INDEX = _ind
 
 func load_project() -> void:
     var f = File.new()
@@ -142,19 +161,41 @@ func load_project() -> void:
     else:
         push_error('Can not read NativeLib project meta data.')
 
+func _sort_versions(v1: String, v2: String) -> bool:
+    var vp1 = v1.split('.')
+    var vp2 = v2.split('.')
+    for i in range(3):
+        if vp1.size() > i and vp2.size() <= i:
+            return true
+        elif vp1.size() <= i and vp2.size() <= i:
+            return false
+        else:
+            var n1 = int(vp1[i])
+            var n2 = int(vp2[i])
+            if n1 > n2:
+                return true
+    return false
+
 func update_plugin_list() -> void:
     for ch in $view/panel/scroll/margin/list.get_children():
         ch.queue_free()
-    var keys = _STORAGE.keys()
+    var keys = _INDEX.keys()
     keys.sort()
     for plugin in keys:
-        var info = _STORAGE[plugin]
+        var info = _INDEX[plugin]
+        var versions = info.keys()
+        versions.sort_custom(self, '_sort_versions')
+        if versions.size() <= 0:
+            continue
+        var version = versions[0]
+        var meta = info[version]
         var platforms = []
-        var files = info.versions[info.latest_version]
-        for f in files:
-            var fns = f.name.split('_')
-            var pls = fns[-1].split('.')
-            platforms.append(pls[0])
+        if 'files' in meta:
+            platforms.append('all')
+        if 'platform_ios' in meta and 'files' in meta.platform_ios:
+            platforms.append('ios')
+        if 'platform_android' in meta and 'files' in meta.platform_android:
+            platforms.append('android')
         var filtered_out := false
         if _platform_filter.size() > 0:
             for pl in _platform_filter:
@@ -163,8 +204,8 @@ func update_plugin_list() -> void:
                     break
         if _name_filter.length() > 0:
             var ff = _name_filter.to_lower()
-            var nn = info.name.to_lower()
-            var dd = info.description.to_lower()
+            var nn = meta.name.to_lower()
+            var dd = meta.description.to_lower()
             if nn.find(ff) < 0 and dd.find(ff) < 0:
                 filtered_out = true
         var local = {}
@@ -177,7 +218,7 @@ func update_plugin_list() -> void:
         if filtered_out:
             continue
         var pi = package_info.instance()
-        pi.init_info(info, local)
+        pi.init_info(meta, local)
         pi.connect('install', self, '_on_plugin_install')
         pi.connect('uninstall', self, '_on_plugin_uninstall')
         pi.connect('update', self, '_on_plugin_update')
@@ -199,7 +240,7 @@ func update_project_info() -> void:
         $view/project/AndroidButton.pressed = false
 
 func update_status() -> void:
-    $view/status/info.text = '%d packages in repository, %d installed'%[_STORAGE.keys().size(), get_installed_packages().size()]
+    $view/status/info.text = '%d packages in repository, %d installed'%[_INDEX.keys().size(), get_installed_packages().size()]
 
 func install_local_nativelib() -> void:
     var http_request = HTTPRequest.new()
