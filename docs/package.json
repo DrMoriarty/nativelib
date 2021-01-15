@@ -1,0 +1,27 @@
+{
+  "name": "NativeLib",
+  "version": "0.0.1",
+  "description": "Binary package management system for Godot Engine",
+  "main": "index.js",
+  "authors": {
+    "name": "DrMoriarty",
+    "email": "drmoriarty.0@gmail.com"
+  },
+  "repository": "https://github.com/DrMoriarty/nativelib/NativeLib",
+  "scripts": {
+    "dev": "vuepress dev src",
+    "build": "vuepress build src"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.8.0",
+    "@vuepress/plugin-medium-zoom": "^1.8.0",
+    "chalk": "^2.0.0",
+    "commander": "^2.0.0",
+    "esm": "^3.0.0",
+    "vuepress": "^1.5.3"
+  },
+  "dependencies": {
+    "vuepress-plugin-sitemap": "^2.3.1"
+  }
+}
