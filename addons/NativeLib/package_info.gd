@@ -25,9 +25,17 @@ func init_info(info: Dictionary, local: Dictionary) -> void:
     _variables = []
     _info = info
     _local = local
-    $box/left/plugin/name.text = info.name
+    if 'display_name' in info:
+        $box/left/plugin/name.text = info.display_name
+    else:
+        $box/left/plugin/name.text = info.name.to_upper()
     $box/left/license.text = 'License: %s'%info.license
-    $box/left/version.text = 'Latest: %s'%info.version
+    $box/left/version.text = 'Version: %s'%info.version
+    if 'godot_version' in info:
+        $box/left/godot.show()
+        $box/left/godot.text = 'For Godot: %s'%info.godot_version
+    else:
+        $box/left/godot.hide()
     if 'updated' in info:
         $box/left/updated.text = 'Updated: %s'%[info.updated.split('T')[0]]
     else:

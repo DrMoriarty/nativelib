@@ -205,8 +205,9 @@ func update_plugin_list() -> void:
         if _name_filter.length() > 0:
             var ff = _name_filter.to_lower()
             var nn = meta.name.to_lower()
+            var dn = meta.display_name.to_lower() if 'display_name' in meta else ''
             var dd = meta.description.to_lower()
-            if nn.find(ff) < 0 and dd.find(ff) < 0:
+            if nn.find(ff) < 0 and dd.find(ff) < 0 and dn.find(ff) < 0:
                 filtered_out = true
         var local = {}
         var installed := false
