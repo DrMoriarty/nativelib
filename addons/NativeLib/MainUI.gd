@@ -131,7 +131,7 @@ func load_storage() -> void:
                     dir2.list_dir_begin()
                     var pack_var = dir2.get_next()
                     while pack_var != '':
-                        if not dir2.current_is_dir():
+                        if not dir2.current_is_dir() and not pack_var.begins_with('.') and pack_var.ends_with('.json'):
                             var fname = dir2.get_current_dir() + "/" + pack_var
                             var f = File.new()
                             if f.open(fname, File.READ) == OK:
@@ -140,6 +140,8 @@ func load_storage() -> void:
                                 var result = JSON.parse(content)
                                 if result.error == OK:
                                     _ind[file_name][result.result.version] = result.result
+                                else:
+                                    push_warning('Unable to parse: '+fname)
                         pack_var = dir2.get_next()
             file_name = dir.get_next()
     else:
