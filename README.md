@@ -22,6 +22,12 @@ Usually MacOSes have preinstalled python 2.7.x. NativeLib-CLI tested with this p
 
 Install python 3 (if it's not installed yet). Also check if python is available in your $PATH. You can set path to python executable if necessary (button "Select Python" in right top corner).
 
+### Python notes
+
+Unfortunately I can not test NativeLib with every version of Python (at least I know that NativeLib doesn't work with python 3.5.x)
+
+Usually I check it with python 2.7.x and 3.9.x. If you have strange errors try to upgrade your Python version. 
+
 ## First launch
 
 During first launch it will install local copy of NativeLib (if you don't have one at system level) and it will update local repository so you can instantly start working with plugins.
