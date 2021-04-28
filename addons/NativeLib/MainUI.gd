@@ -176,6 +176,8 @@ func _sort_versions(v1: String, v2: String) -> bool:
             var n2 = int(vp2[i])
             if n1 > n2:
                 return true
+            elif n1 < n2:
+                return false
     return false
 
 func update_plugin_list() -> void:
