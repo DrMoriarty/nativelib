@@ -4,7 +4,7 @@ NativeLib is a plugin management system for [Godot engine](http://godotengine.or
 
 ## Installation
 
-This repository contains project addon with GUI for command line NativeLib. Just copy it into your `addons` folder of your project and enable it.
+This repository contains project addon with GUI for command line NativeLib. Just copy it into your `addons` folder of your project and enable it in **Project > Project Settings > Plugins**.
 
 Or you can install NativeLib from AssetLib [https://godotengine.org/asset-library/asset/824](https://godotengine.org/asset-library/asset/824)
 
