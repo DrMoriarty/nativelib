@@ -4,6 +4,7 @@ extends Control
 const package_info = preload('res://addons/NativeLib/package_info.tscn')
 const _local_nativelib := 'addons/NativeLib/nativelib'
 const _remote_url := 'https://raw.githubusercontent.com/DrMoriarty/nativelib-cli/HEAD/nativelib'
+const PLATFORMS := ['ios', 'android', 'html5', 'osx']
 
 var _INDEX := {}
 var _PROJECT := {}
@@ -151,9 +152,10 @@ func load_storage() -> void:
     _INDEX = _ind
 
 func load_project() -> void:
+    clear_messages()
     var f = File.new()
     if f.open('res://.nativelib', File.READ) != OK:
-        push_warning('NativeLib not initialized yet')
+        warning_message('NativeLib not initialized yet')
         return
     var content = f.get_as_text()
     f.close()
@@ -161,7 +163,7 @@ func load_project() -> void:
     if result.error == OK:
         _PROJECT = result.result
     else:
-        push_error('Can not read NativeLib project meta data.')
+        error_message('Can not read NativeLib project meta data.')
 
 func _sort_versions(v1: String, v2: String) -> bool:
     var vp1 = v1.split('.')
@@ -196,10 +198,10 @@ func update_plugin_list() -> void:
         var platforms = []
         if 'files' in meta:
             platforms.append('all')
-        if 'platform_ios' in meta and 'files' in meta.platform_ios:
-            platforms.append('ios')
-        if 'platform_android' in meta and 'files' in meta.platform_android:
-            platforms.append('android')
+        for pl in PLATFORMS:
+            var pl_name = 'platform_%s'%pl
+            if pl_name in meta and 'files' in meta[pl_name]:
+                platforms.append(pl)
         var filtered_out := false
         if _platform_filter.size() > 0:
             for pl in _platform_filter:
@@ -223,7 +225,7 @@ func update_plugin_list() -> void:
         if filtered_out:
             continue
         var pi = package_info.instance()
-        pi.init_info(meta, local)
+        pi.init_info(meta, local, platforms)
         pi.connect('install', self, '_on_plugin_install')
         pi.connect('uninstall', self, '_on_plugin_uninstall')
         pi.connect('update', self, '_on_plugin_update')
@@ -240,12 +242,34 @@ func update_project_info() -> void:
     if 'platforms' in _PROJECT:
         $view/project/iOSButton.pressed = 'ios' in _PROJECT.platforms
         $view/project/AndroidButton.pressed = 'android' in _PROJECT.platforms
+        $view/project/OSXButton.pressed = 'osx' in _PROJECT.platforms
     else:
         $view/project/iOSButton.pressed = false
         $view/project/AndroidButton.pressed = false
+        $view/project/OSXButton.pressed = false
+    if not 'platforms' in _PROJECT or _PROJECT.platforms.size() <= 1:
+        warning_message('No platforms selected!')
 
 func update_status() -> void:
     $view/status/info.text = '%d packages in repository, %d installed'%[_INDEX.keys().size(), get_installed_packages().size()]
+
+func clear_messages() -> void:
+    for ch in $view/messages.get_children():
+        ch.queue_free()
+
+func warning_message(txt: String) -> void:
+    add_message(txt, Color.yellow)
+    push_warning(txt)
+
+func error_message(txt: String) -> void:
+    add_message(txt, Color.crimson)
+    push_error(txt)
+
+func add_message(txt: String, col:= Color.white) -> void:
+    var l = Label.new()
+    l.text = txt
+    l.modulate = col
+    $view/messages.add_child(l)
 
 func install_local_nativelib() -> void:
     var http_request = HTTPRequest.new()
@@ -357,12 +381,26 @@ func _on_UpdateSystemButton_pressed() -> void:
     check_system()
 
 func _on_AndroidButton_toggled(button_pressed: bool) -> void:
-    nativelib(['--android'], false)
+    if button_pressed:
+        nativelib(['--android'], false)
+    else:
+        nativelib(['--rm-android'], false)
     load_project()
     update_project_info()
 
 func _on_iOSButton_toggled(button_pressed: bool) -> void:
-    nativelib(['--ios'], false)
+    if button_pressed:
+        nativelib(['--ios'], false)
+    else:
+        nativelib(['--rm-ios'], false)
+    load_project()
+    update_project_info()
+
+func _on_OSXButton_toggled(button_pressed: bool) -> void:
+    if button_pressed:
+        nativelib(['--osx'], false)
+    else:
+        nativelib(['--rm-osx'], false)
     load_project()
     update_project_info()
 
@@ -431,3 +469,13 @@ func _on_PythonDialog_file_selected(path: String) -> void:
 func _on_FilterInstalled_toggled(button_pressed: bool) -> void:
     _installed_filter = button_pressed
     update_plugin_list()
+
+func _on_FilterOSX_toggled(button_pressed: bool) -> void:
+    if button_pressed:
+        if not 'osx' in _platform_filter:
+            _platform_filter.append('osx')
+            update_plugin_list()
+    else:
+        if 'osx' in _platform_filter:
+            _platform_filter.erase('osx')
+            update_plugin_list()

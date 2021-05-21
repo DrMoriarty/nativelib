@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://addons/NativeLib/MainUI.gd" type="Script" id=1]
 [ext_resource path="res://addons/NativeLib/icons/glass.svg" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://addons/NativeLib/icons/reload.svg" type="Texture" id=5]
 [ext_resource path="res://addons/NativeLib/icons/download.svg" type="Texture" id=6]
 [ext_resource path="res://addons/NativeLib/icons/universal_platform.svg" type="Texture" id=7]
+[ext_resource path="res://addons/NativeLib/icons/osx.svg" type="Texture" id=8]
 
 [node name="MainUI" type="MarginContainer"]
 anchor_left = 0.5
@@ -52,23 +53,30 @@ text = "Project platforms:"
 
 [node name="AndroidButton" type="CheckButton" parent="view/project"]
 margin_left = 118.0
-margin_right = 209.0
+margin_right = 208.0
 margin_bottom = 40.0
 hint_tooltip = "Enable Android for project"
 icon = ExtResource( 3 )
 
 [node name="iOSButton" type="CheckButton" parent="view/project"]
-margin_left = 213.0
-margin_right = 304.0
+margin_left = 212.0
+margin_right = 302.0
 margin_bottom = 40.0
 hint_tooltip = "Enable iOS for project"
 icon = ExtResource( 4 )
 
-[node name="Label2" type="Label" parent="view/project"]
-margin_left = 308.0
-margin_top = 13.0
+[node name="OSXButton" type="CheckButton" parent="view/project"]
+margin_left = 306.0
+margin_right = 400.0
+margin_bottom = 40.0
+hint_tooltip = "Enable MacOSX for project"
+icon = ExtResource( 8 )
+
+[node name="gap" type="Control" parent="view/project"]
+modulate = Color( 1, 0.501961, 0.501961, 1 )
+margin_left = 404.0
 margin_right = 531.0
-margin_bottom = 27.0
+margin_bottom = 40.0
 size_flags_horizontal = 3
 
 [node name="SelectPythonButton" type="Button" parent="view/project"]
@@ -77,15 +85,20 @@ margin_right = 634.0
 margin_bottom = 40.0
 text = "Select python"
 
-[node name="top" type="HBoxContainer" parent="view"]
+[node name="messages" type="VBoxContainer" parent="view"]
 margin_top = 44.0
 margin_right = 634.0
-margin_bottom = 70.0
+margin_bottom = 44.0
+
+[node name="top" type="HBoxContainer" parent="view"]
+margin_top = 48.0
+margin_right = 634.0
+margin_bottom = 74.0
 size_flags_horizontal = 3
 custom_constants/separation = 4
 
 [node name="SearchLineEdit" type="LineEdit" parent="view/top"]
-margin_right = 417.0
+margin_right = 374.0
 margin_bottom = 26.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -97,42 +110,49 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="view/top"]
-margin_left = 421.0
+margin_left = 378.0
 margin_top = 6.0
-margin_right = 458.0
+margin_right = 415.0
 margin_bottom = 20.0
 text = "Filter:"
 
 [node name="FilterUniversal" type="CheckBox" parent="view/top"]
-margin_left = 462.0
-margin_right = 502.0
+margin_left = 419.0
+margin_right = 459.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for universal platform."
 icon = ExtResource( 7 )
 
 [node name="FilterAndroid" type="CheckBox" parent="view/top"]
-margin_left = 506.0
-margin_right = 545.0
+margin_left = 463.0
+margin_right = 501.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for Android platform."
 icon = ExtResource( 3 )
 
 [node name="FilterIOS" type="CheckBox" parent="view/top"]
-margin_left = 549.0
-margin_right = 588.0
+margin_left = 505.0
+margin_right = 543.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for iOS platform."
 icon = ExtResource( 4 )
 
+[node name="FilterOSX" type="CheckBox" parent="view/top"]
+margin_left = 547.0
+margin_right = 589.0
+margin_bottom = 26.0
+hint_tooltip = "Show plugins for MacOSX platform."
+icon = ExtResource( 8 )
+
 [node name="FilterInstalled" type="CheckBox" parent="view/top"]
-margin_left = 592.0
+margin_left = 593.0
 margin_right = 634.0
 margin_bottom = 26.0
 hint_tooltip = "Show only installed plugins."
 icon = ExtResource( 6 )
 
 [node name="panel" type="Panel" parent="view"]
-margin_top = 74.0
+margin_top = 78.0
 margin_right = 634.0
 margin_bottom = 590.0
 size_flags_horizontal = 3
@@ -151,7 +171,7 @@ __meta__ = {
 
 [node name="margin" type="MarginContainer" parent="view/panel/scroll"]
 margin_right = 634.0
-margin_bottom = 516.0
+margin_bottom = 512.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/margin_right = 4
@@ -163,7 +183,7 @@ custom_constants/margin_bottom = 4
 margin_left = 4.0
 margin_top = 4.0
 margin_right = 630.0
-margin_bottom = 512.0
+margin_bottom = 508.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 16
@@ -186,45 +206,45 @@ custom_constants/separation = 4
 
 [node name="info" type="Label" parent="view/status"]
 margin_top = 4.0
-margin_right = 437.0
+margin_right = 439.0
 margin_bottom = 18.0
 size_flags_horizontal = 3
 
 [node name="python" type="Label" parent="view/status"]
-margin_left = 441.0
+margin_left = 443.0
 margin_top = 4.0
-margin_right = 441.0
+margin_right = 443.0
 margin_bottom = 18.0
 
 [node name="system" type="Label" parent="view/status"]
-margin_left = 445.0
+margin_left = 447.0
 margin_top = 4.0
-margin_right = 445.0
+margin_right = 447.0
 margin_bottom = 18.0
 
 [node name="InstallSystemButton" type="Button" parent="view/status"]
-margin_left = 449.0
-margin_right = 566.0
+margin_left = 451.0
+margin_right = 542.0
 margin_bottom = 22.0
 hint_tooltip = "Install local copy of NativeLib-CLI utility."
-text = "NativeLib-CLI"
+text = "NativeLib"
 icon = ExtResource( 6 )
 
 [node name="UpdateSystemButton" type="Button" parent="view/status"]
 visible = false
-margin_left = 479.0
-margin_right = 601.0
-margin_bottom = 24.0
+margin_left = 452.0
+margin_right = 542.0
+margin_bottom = 22.0
 hint_tooltip = "Update local copy of NativeLib-CLI utility."
-text = "NativeLib-CLI"
+text = "NativeLib"
 icon = ExtResource( 5 )
 
 [node name="UpdateRepoButton" type="Button" parent="view/status"]
-margin_left = 570.0
+margin_left = 546.0
 margin_right = 634.0
 margin_bottom = 22.0
 hint_tooltip = "Fetch info about all available plugins and store it in your local repository."
-text = "REPO"
+text = "Packages"
 icon = ExtResource( 5 )
 
 [node name="PythonDialog" type="FileDialog" parent="."]
@@ -243,11 +263,13 @@ current_path = "/Users/vasya/projects/trawler.io/"
 
 [connection signal="toggled" from="view/project/AndroidButton" to="." method="_on_AndroidButton_toggled"]
 [connection signal="toggled" from="view/project/iOSButton" to="." method="_on_iOSButton_toggled"]
+[connection signal="toggled" from="view/project/OSXButton" to="." method="_on_OSXButton_toggled"]
 [connection signal="pressed" from="view/project/SelectPythonButton" to="." method="_on_SelectPythonButton_pressed"]
 [connection signal="text_changed" from="view/top/SearchLineEdit" to="." method="_on_SearchLineEdit_text_changed"]
 [connection signal="toggled" from="view/top/FilterUniversal" to="." method="_on_FilterUniversal_toggled"]
 [connection signal="toggled" from="view/top/FilterAndroid" to="." method="_on_FilterAndroid_toggled"]
 [connection signal="toggled" from="view/top/FilterIOS" to="." method="_on_FilterIOS_toggled"]
+[connection signal="toggled" from="view/top/FilterOSX" to="." method="_on_FilterOSX_toggled"]
 [connection signal="toggled" from="view/top/FilterInstalled" to="." method="_on_FilterInstalled_toggled"]
 [connection signal="pressed" from="view/status/InstallSystemButton" to="." method="_on_InstallSystemButton_pressed"]
 [connection signal="pressed" from="view/status/UpdateSystemButton" to="." method="_on_UpdateSystemButton_pressed"]

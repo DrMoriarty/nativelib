@@ -19,7 +19,7 @@ func _ready() -> void:
 #func _process(delta: float) -> void:
 #    pass
 
-func init_info(info: Dictionary, local: Dictionary) -> void:
+func init_info(info: Dictionary, local: Dictionary, platforms: Array) -> void:
     for v in _variables:
         v.queue_free()
     _variables = []
@@ -29,8 +29,8 @@ func init_info(info: Dictionary, local: Dictionary) -> void:
         $box/left/plugin/name.text = info.display_name
     else:
         $box/left/plugin/name.text = info.name.to_upper()
+    $box/left/plugin/version.text = info.version
     $box/left/license.text = 'License: %s'%info.license
-    $box/left/version.text = 'Version: %s'%info.version
     if 'godot_version' in info:
         $box/left/godot.show()
         $box/left/godot.text = 'For Godot: %s'%info.godot_version
@@ -46,13 +46,7 @@ func init_info(info: Dictionary, local: Dictionary) -> void:
         $box/left/author/DonateButton.visible = 'donate' in _info.author
     else:
         $box/left/author.hide()
-    var platforms = []
-    if 'files' in _info:
-        platforms.append('all')
-    if 'platform_ios' in _info and 'files' in _info.platform_ios:
-        platforms.append('ios')
-    if 'platform_android' in _info and 'files' in _info.platform_android:
-        platforms.append('android')
+    $box/left/plugin/osx.visible = 'osx' in platforms
     $box/left/plugin/android.visible = 'android' in platforms
     $box/left/plugin/ios.visible = 'ios' in platforms
     $box/left/plugin/universal.visible = 'all' in platforms
@@ -63,15 +57,12 @@ func init_info(info: Dictionary, local: Dictionary) -> void:
         $box/left/installed/version.text = 'Installed: %s'%local.version
         installed = true
         latest = local.version == info.version
+        $box/left/installed/osx.visible = 'osx' in local.platforms
         $box/left/installed/android.visible = 'android' in local.platforms
         $box/left/installed/ios.visible = 'ios' in local.platforms
         $box/left/installed/universal.visible = 'all' in local.platforms
     else:
         $box/left/installed.hide()
-        #$box/left/installed/version.text = ''
-        #$box/left/installed/android.visible = false
-        #$box/left/installed/ios.visible = false
-        #$box/left/installed/universal.visible = false
     $box/right/description.text = info.description
     $box/right/controls/InstallButton.visible = not installed
     $box/right/controls/UpdateButton.visible = not latest and installed

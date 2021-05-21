@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://addons/NativeLib/package_info.gd" type="Script" id=1]
 [ext_resource path="res://addons/NativeLib/icons/android.svg" type="Texture" id=2]
@@ -9,13 +9,14 @@
 [ext_resource path="res://addons/NativeLib/icons/universal_platform.svg" type="Texture" id=7]
 [ext_resource path="res://addons/NativeLib/icons/www.svg" type="Texture" id=8]
 [ext_resource path="res://addons/NativeLib/icons/heart_icon.svg" type="Texture" id=9]
+[ext_resource path="res://addons/NativeLib/icons/osx.svg" type="Texture" id=10]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.2, 0.231373, 0.309804, 1 )
 
 [node name="plugin_info" type="PanelContainer"]
 anchor_right = 1.0
-margin_bottom = 100.0
+margin_bottom = 123.0
 rect_min_size = Vector2( 0, 100 )
 size_flags_horizontal = 3
 custom_styles/panel = SubResource( 1 )
@@ -26,19 +27,19 @@ __meta__ = {
 
 [node name="box" type="HBoxContainer" parent="."]
 margin_right = 1024.0
-margin_bottom = 150.0
+margin_bottom = 123.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 4
 
 [node name="left" type="VBoxContainer" parent="box"]
 margin_right = 235.0
-margin_bottom = 150.0
+margin_bottom = 123.0
 rect_min_size = Vector2( 200, 100 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.3
-custom_constants/separation = 4
+custom_constants/separation = 2
 
 [node name="plugin" type="HBoxContainer" parent="box/left"]
 margin_right = 235.0
@@ -47,7 +48,7 @@ rect_min_size = Vector2( 0, 32 )
 size_flags_horizontal = 3
 
 [node name="name" type="Label" parent="box/left/plugin"]
-margin_right = 179.0
+margin_right = 121.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -58,31 +59,50 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="version" type="Label" parent="box/left/plugin"]
+margin_left = 125.0
+margin_right = 157.0
+margin_bottom = 32.0
+size_flags_vertical = 3
+text = "0.0.0"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="universal" type="TextureRect" parent="box/left/plugin"]
-margin_left = 183.0
-margin_right = 199.0
+margin_left = 161.0
+margin_right = 177.0
 margin_bottom = 32.0
 texture = ExtResource( 7 )
 stretch_mode = 4
 
 [node name="android" type="TextureRect" parent="box/left/plugin"]
-margin_left = 203.0
-margin_right = 217.0
+margin_left = 181.0
+margin_right = 195.0
 margin_bottom = 32.0
 texture = ExtResource( 2 )
 stretch_mode = 4
 
 [node name="ios" type="TextureRect" parent="box/left/plugin"]
-margin_left = 221.0
-margin_right = 235.0
+margin_left = 199.0
+margin_right = 213.0
 margin_bottom = 32.0
 texture = ExtResource( 3 )
 stretch_mode = 4
 
-[node name="license" type="Label" parent="box/left"]
-margin_top = 36.0
+[node name="osx" type="TextureRect" parent="box/left/plugin"]
+margin_left = 217.0
 margin_right = 235.0
-margin_bottom = 50.0
+margin_bottom = 32.0
+texture = ExtResource( 10 )
+stretch_mode = 4
+
+[node name="license" type="Label" parent="box/left"]
+margin_top = 34.0
+margin_right = 235.0
+margin_bottom = 48.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "License: "
@@ -92,9 +112,9 @@ __meta__ = {
 }
 
 [node name="author" type="HBoxContainer" parent="box/left"]
-margin_top = 54.0
+margin_top = 50.0
 margin_right = 235.0
-margin_bottom = 75.0
+margin_bottom = 71.0
 
 [node name="Label" type="Label" parent="box/left/author"]
 margin_top = 3.0
@@ -122,9 +142,10 @@ icon = ExtResource( 9 )
 flat = true
 
 [node name="version" type="Label" parent="box/left"]
-margin_top = 79.0
+visible = false
+margin_top = 73.0
 margin_right = 235.0
-margin_bottom = 93.0
+margin_bottom = 87.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Version: "
@@ -134,9 +155,9 @@ __meta__ = {
 }
 
 [node name="godot" type="Label" parent="box/left"]
-margin_top = 97.0
+margin_top = 73.0
 margin_right = 235.0
-margin_bottom = 111.0
+margin_bottom = 87.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "For Godot: "
@@ -146,9 +167,9 @@ __meta__ = {
 }
 
 [node name="updated" type="Label" parent="box/left"]
-margin_top = 115.0
+margin_top = 89.0
 margin_right = 235.0
-margin_bottom = 129.0
+margin_bottom = 103.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Updated: "
@@ -158,17 +179,18 @@ __meta__ = {
 }
 
 [node name="installed" type="HBoxContainer" parent="box/left"]
-margin_top = 133.0
+margin_top = 105.0
 margin_right = 235.0
-margin_bottom = 150.0
+margin_bottom = 123.0
 size_flags_horizontal = 3
 custom_constants/separation = 4
 
 [node name="version" type="Label" parent="box/left/installed"]
-margin_right = 179.0
-margin_bottom = 17.0
+margin_right = 157.0
+margin_bottom = 18.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_colors/font_color = Color( 0.572549, 1, 0.498039, 1 )
 text = "Installed:"
 valign = 1
 __meta__ = {
@@ -177,39 +199,47 @@ __meta__ = {
 
 [node name="universal" type="TextureRect" parent="box/left/installed"]
 modulate = Color( 0.572549, 1, 0.498039, 1 )
-margin_left = 183.0
-margin_right = 199.0
-margin_bottom = 17.0
+margin_left = 161.0
+margin_right = 177.0
+margin_bottom = 18.0
 texture = ExtResource( 7 )
 stretch_mode = 4
 
 [node name="android" type="TextureRect" parent="box/left/installed"]
 modulate = Color( 0.572549, 1, 0.498039, 1 )
-margin_left = 203.0
-margin_right = 217.0
-margin_bottom = 17.0
+margin_left = 181.0
+margin_right = 195.0
+margin_bottom = 18.0
 texture = ExtResource( 2 )
 stretch_mode = 4
 
 [node name="ios" type="TextureRect" parent="box/left/installed"]
 modulate = Color( 0.572549, 1, 0.498039, 1 )
-margin_left = 221.0
-margin_right = 235.0
-margin_bottom = 17.0
+margin_left = 199.0
+margin_right = 213.0
+margin_bottom = 18.0
 texture = ExtResource( 3 )
+stretch_mode = 4
+
+[node name="osx" type="TextureRect" parent="box/left/installed"]
+modulate = Color( 0.572549, 1, 0.498039, 1 )
+margin_left = 217.0
+margin_right = 235.0
+margin_bottom = 18.0
+texture = ExtResource( 10 )
 stretch_mode = 4
 
 [node name="right" type="VBoxContainer" parent="box"]
 margin_left = 239.0
 margin_right = 1024.0
-margin_bottom = 150.0
+margin_bottom = 123.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 4
 
 [node name="description" type="Label" parent="box/right"]
 margin_right = 785.0
-margin_bottom = 116.0
+margin_bottom = 89.0
 grow_horizontal = 2
 grow_vertical = 0
 rect_min_size = Vector2( 50, 25 )
@@ -229,9 +259,9 @@ text = "Plugin variables"
 align = 1
 
 [node name="controls" type="HBoxContainer" parent="box/right"]
-margin_top = 120.0
+margin_top = 93.0
 margin_right = 785.0
-margin_bottom = 150.0
+margin_bottom = 123.0
 rect_min_size = Vector2( 0, 30 )
 size_flags_horizontal = 3
 custom_constants/separation = 4
