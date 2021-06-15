@@ -47,7 +47,7 @@ You should have new mounted disk image.
 
 open Terminal and run this command:
 ```
-productbuild —component /Volumes/YourNewVolumeFromTheDMGFile/YourAppName.app /Applications unsigned.pkg
+productbuild --component /Volumes/YourNewVolumeFromTheDMGFile/YourAppName.app /Applications unsigned.pkg
 ```
 
 Where `YourNewVolumeFromTheDMGFile` is a folder with DMG file content,
