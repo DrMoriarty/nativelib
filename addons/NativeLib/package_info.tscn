@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://addons/NativeLib/package_info.gd" type="Script" id=1]
 [ext_resource path="res://addons/NativeLib/icons/android.svg" type="Texture" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://addons/NativeLib/icons/www.svg" type="Texture" id=8]
 [ext_resource path="res://addons/NativeLib/icons/heart_icon.svg" type="Texture" id=9]
 [ext_resource path="res://addons/NativeLib/icons/osx.svg" type="Texture" id=10]
+[ext_resource path="res://addons/NativeLib/icons/tvos.svg" type="Texture" id=11]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.2, 0.231373, 0.309804, 1 )
@@ -48,7 +49,7 @@ rect_min_size = Vector2( 0, 32 )
 size_flags_horizontal = 3
 
 [node name="name" type="Label" parent="box/left/plugin"]
-margin_right = 121.0
+margin_right = 84.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -60,8 +61,8 @@ __meta__ = {
 }
 
 [node name="version" type="Label" parent="box/left/plugin"]
-margin_left = 125.0
-margin_right = 157.0
+margin_left = 88.0
+margin_right = 120.0
 margin_bottom = 32.0
 size_flags_vertical = 3
 text = "0.0.0"
@@ -72,31 +73,43 @@ __meta__ = {
 }
 
 [node name="universal" type="TextureRect" parent="box/left/plugin"]
-margin_left = 161.0
-margin_right = 177.0
+margin_left = 124.0
+margin_right = 140.0
 margin_bottom = 32.0
+hint_tooltip = "Platform independent"
 texture = ExtResource( 7 )
 stretch_mode = 4
 
 [node name="android" type="TextureRect" parent="box/left/plugin"]
-margin_left = 181.0
-margin_right = 195.0
+margin_left = 144.0
+margin_right = 158.0
 margin_bottom = 32.0
+hint_tooltip = "Android"
 texture = ExtResource( 2 )
 stretch_mode = 4
 
 [node name="ios" type="TextureRect" parent="box/left/plugin"]
-margin_left = 199.0
-margin_right = 213.0
+margin_left = 162.0
+margin_right = 176.0
 margin_bottom = 32.0
+hint_tooltip = "iOS"
 texture = ExtResource( 3 )
 stretch_mode = 4
 
 [node name="osx" type="TextureRect" parent="box/left/plugin"]
-margin_left = 217.0
+margin_left = 180.0
+margin_right = 198.0
+margin_bottom = 32.0
+hint_tooltip = "MacOS"
+texture = ExtResource( 10 )
+stretch_mode = 4
+
+[node name="tvos" type="TextureRect" parent="box/left/plugin"]
+margin_left = 202.0
 margin_right = 235.0
 margin_bottom = 32.0
-texture = ExtResource( 10 )
+hint_tooltip = "AppleTV"
+texture = ExtResource( 11 )
 stretch_mode = 4
 
 [node name="license" type="Label" parent="box/left"]
@@ -186,7 +199,7 @@ size_flags_horizontal = 3
 custom_constants/separation = 4
 
 [node name="version" type="Label" parent="box/left/installed"]
-margin_right = 157.0
+margin_right = 120.0
 margin_bottom = 18.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -199,34 +212,47 @@ __meta__ = {
 
 [node name="universal" type="TextureRect" parent="box/left/installed"]
 modulate = Color( 0.572549, 1, 0.498039, 1 )
-margin_left = 161.0
-margin_right = 177.0
+margin_left = 124.0
+margin_right = 140.0
 margin_bottom = 18.0
+hint_tooltip = "Platform independent"
 texture = ExtResource( 7 )
 stretch_mode = 4
 
 [node name="android" type="TextureRect" parent="box/left/installed"]
 modulate = Color( 0.572549, 1, 0.498039, 1 )
-margin_left = 181.0
-margin_right = 195.0
+margin_left = 144.0
+margin_right = 158.0
 margin_bottom = 18.0
+hint_tooltip = "Android"
 texture = ExtResource( 2 )
 stretch_mode = 4
 
 [node name="ios" type="TextureRect" parent="box/left/installed"]
 modulate = Color( 0.572549, 1, 0.498039, 1 )
-margin_left = 199.0
-margin_right = 213.0
+margin_left = 162.0
+margin_right = 176.0
 margin_bottom = 18.0
+hint_tooltip = "iOS"
 texture = ExtResource( 3 )
 stretch_mode = 4
 
 [node name="osx" type="TextureRect" parent="box/left/installed"]
 modulate = Color( 0.572549, 1, 0.498039, 1 )
-margin_left = 217.0
+margin_left = 180.0
+margin_right = 198.0
+margin_bottom = 18.0
+hint_tooltip = "MacOS"
+texture = ExtResource( 10 )
+stretch_mode = 4
+
+[node name="tvos" type="TextureRect" parent="box/left/installed"]
+modulate = Color( 0.572549, 1, 0.498039, 1 )
+margin_left = 202.0
 margin_right = 235.0
 margin_bottom = 18.0
-texture = ExtResource( 10 )
+hint_tooltip = "AppleTV"
+texture = ExtResource( 11 )
 stretch_mode = 4
 
 [node name="right" type="VBoxContainer" parent="box"]

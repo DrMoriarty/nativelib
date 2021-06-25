@@ -4,7 +4,7 @@ extends Control
 const package_info = preload('res://addons/NativeLib/package_info.tscn')
 const _local_nativelib := 'addons/NativeLib/nativelib'
 const _remote_url := 'https://raw.githubusercontent.com/DrMoriarty/nativelib-cli/HEAD/nativelib'
-const PLATFORMS := ['ios', 'android', 'html5', 'osx']
+const PLATFORMS := ['ios', 'android', 'html5', 'osx', 'tvos']
 
 var _INDEX := {}
 var _PROJECT := {}
@@ -168,7 +168,7 @@ func load_project() -> void:
 func _sort_versions(v1: String, v2: String) -> bool:
     var vp1 = v1.split('.')
     var vp2 = v2.split('.')
-    for i in range(3):
+    for i in range(4):
         if vp1.size() > i and vp2.size() <= i:
             return true
         elif vp1.size() <= i and vp2.size() <= i:
@@ -243,10 +243,12 @@ func update_project_info() -> void:
         $view/project/iOSButton.pressed = 'ios' in _PROJECT.platforms
         $view/project/AndroidButton.pressed = 'android' in _PROJECT.platforms
         $view/project/OSXButton.pressed = 'osx' in _PROJECT.platforms
+        $view/project/TVOSButton.pressed = 'tvos' in _PROJECT.platforms
     else:
         $view/project/iOSButton.pressed = false
         $view/project/AndroidButton.pressed = false
         $view/project/OSXButton.pressed = false
+        $view/project/TVOSButton.pressed = false
     if not 'platforms' in _PROJECT or _PROJECT.platforms.size() <= 1:
         warning_message('No platforms selected!')
 
@@ -404,6 +406,14 @@ func _on_OSXButton_toggled(button_pressed: bool) -> void:
     load_project()
     update_project_info()
 
+func _on_TVOSButton_toggled(button_pressed: bool) -> void:
+    if button_pressed:
+        nativelib(['--tvos'], false)
+    else:
+        nativelib(['--rm-tvos'], false)
+    load_project()
+    update_project_info()
+
 func remove_android_module(module: String) -> void:
     var modules := []
     if ProjectSettings.has_setting('android/modules'):
@@ -478,4 +488,14 @@ func _on_FilterOSX_toggled(button_pressed: bool) -> void:
     else:
         if 'osx' in _platform_filter:
             _platform_filter.erase('osx')
+            update_plugin_list()
+
+func _on_FilterTVOS_toggled(button_pressed: bool) -> void:
+    if button_pressed:
+        if not 'tvos' in _platform_filter:
+            _platform_filter.append('tvos')
+            update_plugin_list()
+    else:
+        if 'tvos' in _platform_filter:
+            _platform_filter.erase('tvos')
             update_plugin_list()

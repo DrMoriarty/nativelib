@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://addons/NativeLib/MainUI.gd" type="Script" id=1]
 [ext_resource path="res://addons/NativeLib/icons/glass.svg" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://addons/NativeLib/icons/download.svg" type="Texture" id=6]
 [ext_resource path="res://addons/NativeLib/icons/universal_platform.svg" type="Texture" id=7]
 [ext_resource path="res://addons/NativeLib/icons/osx.svg" type="Texture" id=8]
+[ext_resource path="res://addons/NativeLib/icons/tvos.svg" type="Texture" id=9]
 
 [node name="MainUI" type="MarginContainer"]
 anchor_left = 0.5
@@ -72,9 +73,16 @@ margin_bottom = 40.0
 hint_tooltip = "Enable MacOSX for project"
 icon = ExtResource( 8 )
 
+[node name="TVOSButton" type="CheckButton" parent="view/project"]
+margin_left = 404.0
+margin_right = 513.0
+margin_bottom = 40.0
+hint_tooltip = "Enable AppleTV for project"
+icon = ExtResource( 9 )
+
 [node name="gap" type="Control" parent="view/project"]
 modulate = Color( 1, 0.501961, 0.501961, 1 )
-margin_left = 404.0
+margin_left = 517.0
 margin_right = 531.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
@@ -98,7 +106,7 @@ size_flags_horizontal = 3
 custom_constants/separation = 4
 
 [node name="SearchLineEdit" type="LineEdit" parent="view/top"]
-margin_right = 374.0
+margin_right = 313.0
 margin_bottom = 26.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -110,39 +118,46 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="view/top"]
-margin_left = 378.0
+margin_left = 317.0
 margin_top = 6.0
-margin_right = 415.0
+margin_right = 354.0
 margin_bottom = 20.0
 text = "Filter:"
 
 [node name="FilterUniversal" type="CheckBox" parent="view/top"]
-margin_left = 419.0
-margin_right = 459.0
+margin_left = 358.0
+margin_right = 398.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for universal platform."
 icon = ExtResource( 7 )
 
 [node name="FilterAndroid" type="CheckBox" parent="view/top"]
-margin_left = 463.0
-margin_right = 501.0
+margin_left = 402.0
+margin_right = 440.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for Android platform."
 icon = ExtResource( 3 )
 
 [node name="FilterIOS" type="CheckBox" parent="view/top"]
-margin_left = 505.0
-margin_right = 543.0
+margin_left = 444.0
+margin_right = 482.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for iOS platform."
 icon = ExtResource( 4 )
 
 [node name="FilterOSX" type="CheckBox" parent="view/top"]
-margin_left = 547.0
-margin_right = 589.0
+margin_left = 486.0
+margin_right = 528.0
 margin_bottom = 26.0
 hint_tooltip = "Show plugins for MacOSX platform."
 icon = ExtResource( 8 )
+
+[node name="FilterTVOS" type="CheckBox" parent="view/top"]
+margin_left = 532.0
+margin_right = 589.0
+margin_bottom = 26.0
+hint_tooltip = "Show plugins for AppleTV platform."
+icon = ExtResource( 9 )
 
 [node name="FilterInstalled" type="CheckBox" parent="view/top"]
 margin_left = 593.0
@@ -264,12 +279,14 @@ current_path = "/Users/vasya/projects/trawler.io/"
 [connection signal="toggled" from="view/project/AndroidButton" to="." method="_on_AndroidButton_toggled"]
 [connection signal="toggled" from="view/project/iOSButton" to="." method="_on_iOSButton_toggled"]
 [connection signal="toggled" from="view/project/OSXButton" to="." method="_on_OSXButton_toggled"]
+[connection signal="toggled" from="view/project/TVOSButton" to="." method="_on_TVOSButton_toggled"]
 [connection signal="pressed" from="view/project/SelectPythonButton" to="." method="_on_SelectPythonButton_pressed"]
 [connection signal="text_changed" from="view/top/SearchLineEdit" to="." method="_on_SearchLineEdit_text_changed"]
 [connection signal="toggled" from="view/top/FilterUniversal" to="." method="_on_FilterUniversal_toggled"]
 [connection signal="toggled" from="view/top/FilterAndroid" to="." method="_on_FilterAndroid_toggled"]
 [connection signal="toggled" from="view/top/FilterIOS" to="." method="_on_FilterIOS_toggled"]
 [connection signal="toggled" from="view/top/FilterOSX" to="." method="_on_FilterOSX_toggled"]
+[connection signal="toggled" from="view/top/FilterTVOS" to="." method="_on_FilterTVOS_toggled"]
 [connection signal="toggled" from="view/top/FilterInstalled" to="." method="_on_FilterInstalled_toggled"]
 [connection signal="pressed" from="view/status/InstallSystemButton" to="." method="_on_InstallSystemButton_pressed"]
 [connection signal="pressed" from="view/status/UpdateSystemButton" to="." method="_on_UpdateSystemButton_pressed"]

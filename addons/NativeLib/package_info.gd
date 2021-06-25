@@ -46,6 +46,7 @@ func init_info(info: Dictionary, local: Dictionary, platforms: Array) -> void:
         $box/left/author/DonateButton.visible = 'donate' in _info.author
     else:
         $box/left/author.hide()
+    $box/left/plugin/tvos.visible = 'tvos' in platforms
     $box/left/plugin/osx.visible = 'osx' in platforms
     $box/left/plugin/android.visible = 'android' in platforms
     $box/left/plugin/ios.visible = 'ios' in platforms
@@ -57,6 +58,7 @@ func init_info(info: Dictionary, local: Dictionary, platforms: Array) -> void:
         $box/left/installed/version.text = 'Installed: %s'%local.version
         installed = true
         latest = local.version == info.version
+        $box/left/installed/tvos.visible = 'tvos' in local.platforms
         $box/left/installed/osx.visible = 'osx' in local.platforms
         $box/left/installed/android.visible = 'android' in local.platforms
         $box/left/installed/ios.visible = 'ios' in local.platforms
