@@ -168,10 +168,10 @@ func load_project() -> void:
 func _sort_versions(v1: String, v2: String) -> bool:
     var vp1 = v1.split('.')
     var vp2 = v2.split('.')
-    for i in range(4):
+    for i in max(vp1.size(), vp2.size()):
         if vp1.size() > i and vp2.size() <= i:
             return true
-        elif vp1.size() <= i and vp2.size() <= i:
+        elif vp1.size() <= i and vp2.size() > i:
             return false
         else:
             var n1 = int(vp1[i])
